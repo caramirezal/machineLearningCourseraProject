@@ -1,14 +1,27 @@
-## Machine Learning on the coursera class project
-## about data from accelerometers.
-## Data was collected as part of the human activity recognition research  
-## with the aim of predicting how well a sport activity is performed. 
+---
+title: "Machine Learning Project"
+author: "Carlos Ramirez"
+date: "May 24, 2018"
+output: html_document
+---
 
+# Intro 
+
+The aim of this project is to implement a machine learning technique to predict how well an
+exercise activity is performed. Details of the data set can be found [here](http://web.archive.org/web/20161224072740/http:/groupware.les.inf.puc-rio.br/har). 
+
+## Data preprocessing
+
+First, the training [data](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv) was loaded, processed and normalized. Since the implementation was focused on accelerometer numeric values.
+Categorical and non-sense data as time, user names were dropped. Additionally, column variables filled
+with NA values and incomplete observations were left apart. Finally, the resulting data was normalized as can be shown next.
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
 library(caret)
 library(dplyr)
 library(parallel)
 library(doParallel)
 
-######################################################################################
 ## Data preprocessing
 
 ## loading train data
@@ -37,7 +50,7 @@ drop_vars <- c(drop_vars,
                "skewness_yaw_dumbbell","amplitude_yaw_belt",
                "new_window","num_window")
 train.processed <- train[,!colnames(train)%in%drop_vars]
-str(train[,colnames(train)%in%drop_vars])
+#str(train[,colnames(train)%in%drop_vars])
 
 train.processed <- mutate(train.processed,classe=as.factor(classe))
 
@@ -50,18 +63,21 @@ dim(train.processed)
 ## normalizing data
 train.stand <- scale(select(train.processed,-classe))
 train.stand <- data.frame(cbind(classe=train.processed$classe,as.data.frame(train.stand)))
-str(train.stand)
+train.stand[1:5,1:5]
+```
 
-#write.csv(train.stand,
-#          file = "data/accelerometersProcessed.csv",
-#          row.names = FALSE)
+Then, a random forest approach was performed on the processed data. Train and test set was defined
+as 80 and 20 percent of the total of processed observations, respectively. A 5-fold cross validation
+was performed and the number of trees was setted to 45 as shown in the next code. 
 
-###################################################################################
+```{r}
+set.seed(333)
+
 ## performing random forest
 train <- createDataPartition(train.stand$classe,
                              p = 0.8,
                              list = FALSE)
-tail(train)
+#tail(train)
 
 fitControl <- trainControl(method = "cv",
                            number = 5)
@@ -76,3 +92,7 @@ performanceTime
 
 forest.predict <- predict(forest,newdata = train.stand[-train,])
 confusionMatrix(forest.predict,train.stand$classe[-train])
+```
+
+As can be seen from the script and the output the accuracy of the prediction on the
+testing data was 0.9926. 
