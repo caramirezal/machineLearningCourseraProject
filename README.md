@@ -1,6 +1,6 @@
 # Machine Learning Coursera Project
 
-Contain the project of the Machine Learning class of Data Science Coursera specialization. The test consist on applying machine learning techniques to predict body exercise patterns based on accelerometers of several comercial devices.
+Contain the project of the Machine Learning class of Data Science Coursera specialization. The test consist on applying machine learning techniques to predict body exercise patterns based on accelerometers of several comercial devices. You can see the full implementation <a href="https://caramirezal.github.io/dataScience/machineLearningCourseraProject.html">here</a>.
 
 The next code implements a random forest to the body activity data. The
 data is partitioned to 80/20 in train/test of the total observations. 
@@ -33,4 +33,3 @@ forest.accuracy <- confusionMatrix(forest.predict,train.stand$classe[-train])$ov
 confusionMatrix(forest.predict,train.stand$classe[-train])
 ```
 
-You can see the full implementation <a href="https://caramirezal.github.io/dataScience/machineLearningCourseraProject.html">here</a>.
