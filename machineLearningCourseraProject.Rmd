@@ -5,12 +5,12 @@ date: "May 24, 2018"
 output: html_document
 ---
 
-# Intro 
+## **Intro**
 
 The aim of this project was to implement a machine learning technique to predict how well an
 exercise activity is performed. Details of the data set can be found [here](http://web.archive.org/web/20161224072740/http:/groupware.les.inf.puc-rio.br/har). 
 
-## Data preprocessing
+## **Data preprocessing**
 
 First, the training [data](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv) was processed and normalized. Since the implementation was focused on accelerometer numeric values
 categorical and non-sense variables such as time and user names were dropped. Additionally, column variables filled with NA values and incomplete observations were left apart. Finally, the resulting data was normalized as can be shown next.
@@ -92,7 +92,7 @@ forest <- train(classe~.,
                 ntree=45,
                 trControl=fitControl)
 performanceTime.forest <- Sys.time() - initialTime
-performanceTime.forest
+#performanceTime.forest
 
 forest.predict <- predict(forest,newdata = train.stand[-train,])
 forest.accuracy <- confusionMatrix(forest.predict,train.stand$classe[-train])$overall[1] 
@@ -118,7 +118,7 @@ lda <- train(classe~.,
                 method="lda",
                 trControl=fitControl)
 performanceTime.lda <- Sys.time() - initialTime
-performanceTime.lda
+#performanceTime.lda
 
 lda.predict <- predict(lda,newdata = train.stand[-train,])
 lda.accuracy <- confusionMatrix(lda.predict,train.stand$classe[-train])$overall[1]
@@ -132,6 +132,10 @@ under the same parameters of training as random forest to compare accuracies in 
 The accuracy of LDA was `r lda.accuracy` and the time performance was `r performanceTime.lda` seconds.  
 
 
+
+## **Random Forest prediction variability**
+
+Samples of size 20 were drawn from the test set in order to evaluate the variability of the accuracy performance of the random forest in samples of this size. In the next plot the values of accuracy for 100 simulations are shown. 
 
 ```{r}
 ## evaluation of random forest accuracy variation
@@ -153,11 +157,9 @@ plot(accuracy,type="l",col="steelblue",font.lab=2,lwd=2,
      xlab = "Simulation",ylab = "Accuracy")
 ```
 
-## Random Forest prediction variability
+The mean accuracy value was `r mean(accuracy)` while the standard deviation was `r sd(accuracy)` which suggest good performance for the validation set.
 
-Samples of size 20 were drawn from the test set in order to evaluate the variability of the accuracy performance of the random forest in samples of this size. In the above plot the values of accuracy for 100 simulations are shown. The mean accuracy value was `r mean(accuracy)` while the standard deviation was `r sd(accuracy)` which suggest good performance for the validation set.
-
-## Conclusions
+## **Conclusions**
 
 The aim of this report was to implement a machine learning technique to try
 predicting how well a body activity is performed. With that goal the body activity data
@@ -170,3 +172,4 @@ model in samples with size equal to the validation sample 100 simulations
 were carried out on samples of size 20 drawn from the test set. The average accuracy was
 `r mean(accuracy)` and the standard deviation was `r sd(accuracy)` which suggest that
 the model will perform well in the validation set.
+
