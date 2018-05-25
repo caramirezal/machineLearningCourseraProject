@@ -41,7 +41,7 @@ processData <- function(data) {
         ## dropping variables with more than 2/3 of the number of training observations
         drop_vars <- names(data)[NA_number > (2*ncol(data))/3]
         
-        ## adding non sense variables as name of the activity subject
+        ## removing non sense variables as name of the activity subject
         drop_vars <- c(drop_vars,
                        "X","user_name","raw_timestamp_part_1",
                        "raw_timestamp_part_2","cvtd_timestamp",
@@ -157,7 +157,7 @@ plot(accuracy,type="l",col="steelblue",font.lab=2,lwd=2,
      xlab = "Simulation",ylab = "Accuracy")
 ```
 
-The mean accuracy value was `r mean(accuracy)` while the standard deviation was `r sd(accuracy)` which suggest good performance for the validation set.
+The mean accuracy value was `r mean(accuracy)` while the standard deviation was `r sd(accuracy)` which suggest it will have good performance for the validation set.
 
 ## **Conclusions**
 
