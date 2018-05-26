@@ -13,7 +13,7 @@ exercise activity is performed. Details of the data set can be found [here](http
 ## **Data preprocessing**
 
 First, the training [data](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv) was processed and normalized. Since the implementation was focused on accelerometer numeric values
-categorical and non-sense variables such as time and user names were dropped. Additionally, column variables filled with NA values and incomplete observations were left apart. Finally, the resulting data was normalized as can be shown next.
+categorical and non-sense variables such as time and user names were dropped. Additionally, column variables with too many NA values (2/3 of the total) and incomplete observations were left apart. Finally, the resulting data was normalized as can be shown next.
 
 ```{r message=FALSE,warning=FALSE}
 library(caret)
@@ -70,7 +70,8 @@ processData <- function(data) {
 train.stand <- processData(train)
 ```
 
-Then, a random forest approach was performed on the processed data. Train and test set were defined
+The resulting processed data has 19622 rows and 53 columns of numeric real values.
+Then, a random forest approach was performed on this processed data. Train and test set were defined
 as 80 and 20 percent of the total of processed observations, respectively. A 5-fold cross validation
 was performed and the number of trees was setted to 45 as shown in the next code. 
 
@@ -127,9 +128,9 @@ lda.accuracy <- confusionMatrix(lda.predict,train.stand$classe[-train])$overall[
 
 
 As can be seen from the script and the output the accuracy of the prediction of Random Forest on the
-testing data was 0.9926. The performance time was `r performanceTime.forest` seconds. LDA was performed
+testing data was 0.9926. The performance time was ~ 5.5 minutes. LDA was performed
 under the same parameters of training as random forest to compare accuracies in both techniques. 
-The accuracy of LDA was `r lda.accuracy` and the time performance was `r performanceTime.lda` seconds.  
+The accuracy of LDA was `r lda.accuracy` and the time performance was ~ 1.5 minutes.  
 
 
 
@@ -157,7 +158,9 @@ plot(accuracy,type="l",col="steelblue",font.lab=2,lwd=2,
      xlab = "Simulation",ylab = "Accuracy")
 ```
 
-The mean accuracy value was `r mean(accuracy)` while the standard deviation was `r sd(accuracy)` which suggest it will have good performance for the validation set.
+The mean accuracy value was `r mean(accuracy)` while the standard deviation was `r sd(accuracy)` which suggest it will have good performance for the validation set. Since Random Forest has good accuracy 
+values no need for more complex stacking techniques are need and hence the simple Random Forest
+constructed so far was chose as the final model.
 
 ## **Conclusions**
 
@@ -171,5 +174,6 @@ In order to evaluate the performance of the Random Forest
 model in samples with size equal to the validation sample 100 simulations
 were carried out on samples of size 20 drawn from the test set. The average accuracy was
 `r mean(accuracy)` and the standard deviation was `r sd(accuracy)` which suggest that
-the model will perform well in the validation set.
+the model will perform well in the validation set. For this reason, the simple Random Forest
+contructed in this manner were chosed as the final model for prediction.
 
